@@ -1,4 +1,4 @@
-<p align="center"><img width="100%" src="solvexai/source/_static/img/solvexAI.png"/></p>
+<p align="center"><img width="65%" src="images/solvexailogo.jpeg"/></p>
 
 ------------------------------------------------------------------------------------------
 
@@ -29,4 +29,4 @@ This platform aspires to make staking accessible, efficient, and rewarding for b
 Subscribe to our X for new announcement
 https://x.com/solvexdotai
 
-<p align="center"><img width="65%" src="solvexai/source/_static/img/solvexAI.png"/></p>
+<p align="center"><img width="65%" src="images/solvexailogo.jpeg"/></p>
