@@ -1,0 +1,75 @@
+version: "3"
+services:
+  db:
+    image: postgres:10.4
+    ports:
+      - "5432:5432"
+
+  sqs:
+    image: softwaremill/elasticmq
+    hostname: sqs
+    ports:
+      - 9324:9324
+
+  django:
+    hostname: django
+    env_file:
+      - docker/dev/docker.env
+    build:
+      context: ./
+      dockerfile: docker/dev/django/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - sqs
+      - statsd-exporter
+    volumes:
+      - .:/code
+
+  worker:
+    env_file:
+      - docker/dev/docker.env
+    build:
+      context: ./
+      dockerfile: docker/dev/worker/Dockerfile
+    depends_on:
+      - django
+    volumes:
+      - .:/code
+
+  worker_py3_8:
+    env_file:
+      - docker/dev/docker.env
+    build:
+      context: ./
+      dockerfile: docker/dev/worker_py3.8/Dockerfile
+    depends_on:
+      - django
+    volumes:
+      - .:/code
+
+  nodejs:
+    hostname: nodejs
+    build:
+      context: ./
+      dockerfile: docker/dev/nodejs/Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - "8888:8888"
+      - "35729:35729"
+    volumes:
+      - .:/code
+      - /code/node_modules
+      - /code/bower_components
+
+  statsd-exporter:
+    hostname: statsd
+    image: prom/statsd-exporter:latest
+    command:
+      - '--log.level=info'
+      - '--web.telemetry-path=/statsd/metrics'
+    ports:
+      - '9125:9125'
+      - '9102:9102'
